@@ -1,43 +1,60 @@
 // from data.js
 var tableData = data;
 
-// from data.js
-var tableData = data;
 
 // YOUR CODE HERE!
-function showTable(tableData){
-  var tbody = d3.select(".table").select("tbody");
-  tbody.html("");
-  tableData.forEach((x) => {
-    var row = tbody.append("tr");
-    Object.entries(x).forEach(([key, value]) => {
-      var cell = row.append("td");
-      cell.text(value);
+// Take a look at the available data from data.js
+// console.log(tableData);
+
+
+// Creating References
+var $tbody = d3.select("tbody");
+var button = d3.select("#filter-btn");
+var inputFieldDate = d3.select("#datetime");
+var columns = ["datetime", "city", "state", "country", "shape", "comments"]
+
+
+
+
+// Inputing the data into the HTML
+var addData = (dataInput) => {
+    dataInput.forEach(ufoSightings => {
+        var row = $tbody.append("tr");
+        columns.forEach(column => row.append("td").text(ufoSightings[column])
+        )
     });
-  });
-};
+}
 
-//write table to html
-showTable(tableData);
+addData(tableData);
 
-//listen for filter button
-var button1 = d3.select("#filter-btn");
-button1.on("click", function() {
-  // Select the input element and get the raw HTML node
-  var inputElement1 = d3.select("#datetime");
-    var inputValue = inputElement1.property("value");
-    var filteredData = tableData.filter(function(event){
-        if(inputValue !== null && inputValue !== ''){
-            return event.datetime === inputValue;};
-          return event.datetime;
-        });
 
-  //write filtered table to html
-  showTable(filteredData);
-});
+// Creating an Event Listener for the Button
+// Setting up the Filter Button for Date
+button.on("click", () => {
 
-//clear form filters and show full table
-function resetForm(element) {
-  element.form.reset();
-  showTable(tableData);
-};
+    d3.event.preventDefault();
+    
+
+    var inputDate = inputFieldDate.property("value").trim();
+    
+
+    var filterDate = tableData.filter(tableData => tableData.datetime === inputDate);
+    
+
+    $tbody.html("");
+
+    let response = {
+        filterDate
+    }
+
+
+    if(response.filterDate.length !== 0) {
+        addData(filterDate);
+    }
+
+    // Filtering on date only
+    
+        else {
+            $tbody.append("tr").append("td").text("No Sightings, please try another date...");
+        }
+})
