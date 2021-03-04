@@ -4,7 +4,7 @@ var tableData = data;
 
 // YOUR CODE HERE!
 // Take a look at the available data from data.js
-// console.log(tableData);
+console.log(tableData);
 
 
 // Creating References
